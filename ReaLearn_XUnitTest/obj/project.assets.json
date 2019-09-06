@@ -3010,6 +3010,7 @@
           "Microsoft.AspNetCore.Http": "2.2.2",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.9",
           "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.6",
+          "Moq": "4.13.0",
           "bootstrap": "4.0.0"
         },
         "compile": {
