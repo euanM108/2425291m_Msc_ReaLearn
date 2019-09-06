@@ -1,0 +1,171 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {}
+  },
+  "projects": {
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "projectName": "ReaLearn_Core",
+        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
+        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Euan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[2.1.9, )"
+            },
+            "Microsoft.jQuery.Unobtrusive.Ajax": {
+              "target": "Package",
+              "version": "[3.2.6, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.13.0, )"
+            },
+            "bootstrap": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+        "projectName": "ReaLearn_XUnitTest",
+        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+        "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
+        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Euan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {
+              "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+                "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.0.1, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.13.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}

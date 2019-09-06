@@ -3010,7 +3010,6 @@
           "Microsoft.AspNetCore.Http": "2.2.2",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.9",
           "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.6",
-          "Moq": "4.13.0",
           "bootstrap": "4.0.0"
         },
         "compile": {
@@ -9532,11 +9531,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+      "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
       "projectName": "ReaLearn_XUnitTest",
-      "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+      "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
       "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
-      "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\obj\\",
+      "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -9555,8 +9554,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
-              "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj"
+            "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+              "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj"
             }
           }
         }

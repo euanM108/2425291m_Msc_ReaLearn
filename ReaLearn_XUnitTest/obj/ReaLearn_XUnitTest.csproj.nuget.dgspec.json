@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {}
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {}
   },
   "projects": {
-    "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
         "projectName": "ReaLearn_Core",
-        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
         "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
-        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\obj\\",
+        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -74,10 +74,6 @@
               "target": "Package",
               "version": "[3.2.6, )"
             },
-            "Moq": {
-              "target": "Package",
-              "version": "[4.13.0, )"
-            },
             "bootstrap": {
               "target": "Package",
               "version": "[4.0.0, )"
@@ -91,14 +87,14 @@
         }
       }
     },
-    "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
         "projectName": "ReaLearn_XUnitTest",
-        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
+        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\ReaLearn_XUnitTest.csproj",
         "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
-        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_XUnitTest\\obj\\",
+        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_XUnitTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -117,8 +113,8 @@
         "frameworks": {
           "netcoreapp2.2": {
             "projectReferences": {
-              "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
-                "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj"
+              "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+                "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj"
               }
             }
           }

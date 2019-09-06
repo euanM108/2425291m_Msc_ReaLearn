@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {}
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {}
   },
   "projects": {
-    "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
+    "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "projectUniqueName": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
         "projectName": "ReaLearn_Core",
-        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
+        "projectPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\ReaLearn_Core.csproj",
         "packagesPath": "C:\\Users\\Euan\\.nuget\\packages\\",
-        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\ReaLearn\\ReaLearn_Core\\obj\\",
+        "outputPath": "E:\\Euan\\Documents\\GitHub\\UoG\\2425291m_Msc_ReaLearn\\ReaLearn_Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -73,10 +73,6 @@
             "Microsoft.jQuery.Unobtrusive.Ajax": {
               "target": "Package",
               "version": "[3.2.6, )"
-            },
-            "Moq": {
-              "target": "Package",
-              "version": "[4.13.0, )"
             },
             "bootstrap": {
               "target": "Package",
