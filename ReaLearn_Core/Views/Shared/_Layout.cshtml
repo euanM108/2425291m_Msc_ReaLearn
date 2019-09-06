@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ReaLearn_Core</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-flatly.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/Custom_CSS/animate-background-colour.css" />
+        <link rel="stylesheet" href="~/css/Custom_CSS/sidebar.css" />
+        <link rel="stylesheet" href="~/css/Custom_CSS/TableFormat.css" />
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+
+    </environment>
+
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+
+
+
+
+
+<body>
+
+    <partial name="_NavBar" />
+
+    @RenderBody()
+
+    <footer class="fixed-bottom" style="margin-left:1%">
+        <p>&copy; @DateTime.Now.Year - ReaLearn <img src="~/images/svg/squirrel.svg" class="mr-3"></p>
+    </footer>
+
+    <!-- These need to stay at bottom for exporting to work -->
+    <script type="application/javascript" src="~/lib/jquery/dist/jquery.js" crossorigin="anonymous"></script>
+    <script type="application/javascript" src="https://kit.fontawesome.com/dab063b17d.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/lib/DataTables/datatables.min.css" />
+
+
+    <script type="text/javascript" src="~/lib/DataTables/datatables.min.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+    <script type="application/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+

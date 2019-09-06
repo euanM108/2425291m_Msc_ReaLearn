@@ -1,0 +1,105 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+
+
+<div class="container-fluid padding-zero position-fixed" style="z-index:5" >
+    <div class="row" id="body-row">
+        <div id="sidebar-container" class="col-md-2 col-lg-2 col-xl-2 d-none d-md-block" style="position: absolute; z-index: 1; min-width: 190px;">
+            <ul class="list-group">
+                <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                    <small>MAIN MENU</small>
+                </li>
+
+                <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <img src="~/images/svg/dashboard.svg" class="mr-3">
+                        <span class="menu-collapsed">Dashboard</span>
+                        <span class="submenu-icon icon-collapse ml-auto"></span>
+                    </div>
+                </a>
+
+                <div id='submenu1' class="collapse sidebar-submenu  submenu-collapse">
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a asp-action="Dashboard" asp-controller="home" class="list-group-item list-group-item-action bg-light">
+                            <span class="menu-collapsed">Home Page</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Index" asp-controller="home" class="list-group-item list-group-item-action bg-light">
+                            <span class="menu-collapsed">Home Page</span>
+                        </a>
+                    }
+                    <a asp-action="contact" asp-controller="home" class="list-group-item list-group-item-action bg-light">
+                        <span class="menu-collapsed">Contact Us</span>
+                    </a>
+                    <a asp-action="about" asp-controller="home" class="list-group-item list-group-item-action bg-light">
+                        <span class="menu-collapsed">About Us</span>
+                    </a>
+                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-light list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-start align-items-center">
+                            <img src="~/images/svg/pencil.svg" class="mr-3">
+                            <span class="menu-collapsed">Admin</span>
+                            <span class="submenu-icon icon-collapse ml-auto"></span>
+                        </div>
+                    </a>
+
+                    <div id="submenu2" class="collapse sidebar-submenu submenu-collapse">
+                        <a asp-action="ViewUsers" asp-controller="Customer" class="list-group-item list-group-item-action bg-light">
+                            <span class="menu-collapsed">Manage Users</span>
+                        </a>
+                        <a asp-action="manage" asp-controller="Course" class="list-group-item list-group-item-action bg-light">
+                            <span class="menu-collapsed">Manage Courses</span>
+                        </a>
+
+                    </div>
+                }
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a asp-action="Index" asp-controller="Account" class="bg-light list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-start align-items-center">
+                            <img src="~/images/svg/tools.svg" class="mr-3">
+                            <span class="menu-collapsed" style="font-size: medium">Account</span>
+                        </div>
+                    </a>
+                }
+                <li class="list-group-item sidebar-separator menu-collapsed"></li>
+                <a asp-action="Help" asp-controller="Home" class="bg-light list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <img src="~/images/svg/question.svg" class="mr-3">
+                        <span class="menu-collapsed">Help</span>
+                    </div>
+                </a>
+
+
+                <li class="list-group-item logo-separator d-flex justify-content-center">
+                    <!-- SPACE FOR LOGO -->
+                </li>
+            </ul>
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" class="list-group-item logo-separator d-flex justify-content-center">
+
+                    <button type="submit" name="logout" class="btn btn-primary margin-zero log-button rounded-0">LOGOUT</button>
+
+                </form>
+            }
+            else
+            {
+                <div class="list-group-item logo-separator d-flex justify-content-center">
+                    <a asp-action="index" asp-controller="Home" class="btn btn-primary margin-zero log-button rounded-0">LOGIN</a>
+                </div>
+            }
+        </div>
+        </div>
+    </div>
+

@@ -1,0 +1,16 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-music"></i> Add Audio</h4>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container">
+        <h5 for="AddAudioAssetNameAJAX">Asset Name:</h5>
+        @Html.TextBox("AddAudioAssetNameAJAX", null, new { @class = "form-control" })
+        <br />
+        <label for="AudioObjectFile" class="btn-lg btn-warning margin-zero"><span class="fa fa-upload fa-fw mr-3"></span>Audio Object</label>
+        <input class="no-display" id="AudioObjectFile" name="file" type="file"  size="1">
+        <p class="InputErrorMessage">Please enter an asset name.</p>
+    </div>
+</div>

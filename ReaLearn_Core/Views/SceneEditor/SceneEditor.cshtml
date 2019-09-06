@@ -1,0 +1,300 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel
+@{
+	ViewData["Title"] = "Create";
+}
+
+<script type="application/javascript" src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" href="~/css/Custom_CSS/SceneEditor.css" />
+<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="application/javascript" src="~/lib/slick-1.8.1/slick/slick.min.js"></script>
+
+
+
+
+
+<body class="h-100">
+    <div id="main-row" class="row">
+        <div id="existing-scenes-partial" class="col--md-1 col-lg-1 col-xl-1 col-sm-2 offset-sm-0 offset-md-2 offset-lg-2 offset-xl-2">
+            <partial name="_ExistingScenes" model="@Model" />
+        </div>
+        <div class="main-body col-md-8 col-lg-8 col-sm-8 col-xl-8 col-xs-8">
+
+            <div id="myEmbeddedScene" class="scene-canvas position-relative">
+                @if (Model != null)
+                {
+                    @if (Model.Scenes != null)
+                    {
+
+                        @if (Model.Scenes.AsEnumerable().ElementAt(Model.SelectedScene) != null)
+                        {
+                            <partial name="_SceneCreation" model="@Model" />
+                        }
+                    }
+                }
+            </div>
+            <div id="object-editor-carousel">
+                <partial name="_ObjectEditorCarousel" model="@Model" />
+            </div>
+        </div>
+    </div>
+
+
+    <div id="addBackgroundImageModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddBackgroundImagePartialModal" model="@Model" />
+            </div>
+        </div>
+    </div>
+    <div id="addTextModal" class="fade modal" tabindex="-1" role="dialog" asp-validation-summary="All">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddTextPartialModal" />
+            </div>
+        </div>
+    </div>
+    <div id="addQuestionModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddQuestionPartialModal" />
+            </div>
+        </div>
+    </div>
+    <div id="addImageModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddImagePartialModal" />
+            </div>
+        </div>
+    </div>
+    <div id="addVideoModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddVideoPartialModal" />
+            </div>
+        </div>
+    </div>
+    <div id="addAudioModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <partial name="_AddAudioPartialModal" />
+            </div>
+        </div>
+    </div>
+    <div id="addHotSpotModal" class="fade modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-light">
+                <div id="updatehotspotpartialmodal">
+                    <partial name="_AddHotspotPartialModal" model="@Model" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="~/js/Custom_JS/ObjectEditorCarousel.js"></script>
+    <script type="text/javascript" src="~/js/Custom_JS/VRObjectFunctions.js"></script>
+    <script type="text/javascript">
+
+
+		// EXPORT ====================================================================================================================
+
+		$('#ExportAJAXbtn').on('click', function () {
+			$.ajax({
+				url: "/Export/Export",
+				method: 'GET',
+				data: { 'courseId': @Model.CourseId },
+				xhrFields: {
+					responseType: 'blob'
+				},
+				success: function (data) {
+					var a = document.createElement('a');
+					var url = window.URL.createObjectURL(data);
+					a.href = url;
+					a.download = 'C:/OPT/ZIPS/' +@Model.CourseId+".zip";
+					document.body.append(a);
+					a.click();
+					a.remove();
+					window.URL.revokeObjectURL(url);
+				}
+			});
+		});
+
+
+
+		$('.property-editors-slick').slick({
+			slidesToShow: 2,
+			arrows: true,
+			swipeToSlide: false,
+			slidesToScroll: 1,
+			draggable: false,
+			infinite: false,
+		});
+
+
+		function ShowPreview(input) {
+			if (input.files && input.files[0]) {
+			var ImageDir = new FileReader();
+			ImageDir.onload = function (e) {
+				$('#impPrev').attr('src', e.target.result);
+				$('#sky').attr('src', e.target.result);
+			}
+
+				ImageDir.readAsDataURL(input.files[0]);
+
+				var formData = new FormData();
+				formData.append('file', $('#backgroundImageFile')[0].files[0]); // myFile is the input type="file" control
+				formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+
+				var url = "/SceneEditor/UploadBackgroundImage";
+
+				$.ajax({
+				url: url,
+				type: 'POST',
+				data: formData,
+				processData: false,  // tell jQuery not to process the data
+				contentType: false,  // tell jQuery not to set contentType
+
+			});
+			}
+		}
+
+
+
+
+
+	function  AddObject(objectType)
+	{
+		var formData = new FormData();
+
+
+		if (objectType == "TextObject") {
+			formData.append('text', $("#AddTextObjectAJAX").val());
+			formData.append('AssetName', $("#AddTextAssetNameAJAX").val());
+
+			formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			var url = "/SceneEditor/AddTextObject";
+		}
+		else if (objectType == "QuestionObject") {
+
+			formData.append('Question', $("#QuestionText").val());
+			formData.append('ResponseOneText', $("#ResponseOneText").val());
+			formData.append('ResponseTwoText', $("#ResponseTwoText").val());
+			formData.append('ResponseThreeText', $("#ResponseThreeText").val());
+			formData.append('ResponseFourText', $("#ResponseFourText").val());
+
+			formData.append('ResponseOneCorrect', $("#isResponseOneCorrect").is(":checked"));
+			formData.append('ResponseTwoCorrect', $("#isResponseTwoCorrect").is(":checked"));
+			formData.append('ResponseThreeCorrect', $("#isResponseThreeCorrect").is(":checked"));
+			formData.append('ResponseFourCorrect', $("#isResponseFourCorrect").is(":checked"));
+
+			formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			var url = "/SceneEditor/AddQuestionObject";
+		}
+		else if (objectType == "VideoObject") {
+			 formData.append('AssetName', $("#AddVideoAssetNameAJAX").val());
+			 formData.append('file', $('#VideoObjectFile')[0].files[0]); // myFile is the input type="file" control
+			 formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			 var url = "/SceneEditor/UploadFile";
+		}
+		else if (objectType == "HotSpotObject") {
+			console.log('trying to add hotspot');
+			 formData.append('AssetName', $("#AddHotspotAssetNameAJAX").val());
+
+			formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			var selectedAction = $('select.hotspot-action-select-class').children("option:selected").val();
+			formData.append('Action', selectedAction);
+
+			if (selectedAction == "link") {
+				formData.append('Linked', $("#hotspot-scene-select").children("option:selected").val());
+			} else if (selectedAction == "play" || selectedAction == "stop") {
+				formData.append('Linked', $("#hotspot-video-select").children("option:selected").val());
+			} else {
+				formData.append('Linked', $("#hotspot-object-select").children("option:selected").val());
+			}
+			formData.append('onClick', $("#hotspot-onclick").is(":checked"));
+			var url = "/SceneEditor/AddHotSpotObject";
+		}
+		else if (objectType == "ImageObject") {
+			formData.append('AssetName', $("#AddImageAssetNameAJAX").val());
+			formData.append('file', $('#ImageObjectFile')[0].files[0]); // myFile is the input type="file" control
+			formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			var url = "/SceneEditor/UploadFile";
+		}
+		else if (objectType == "AudioObject") {
+			formData.append('AssetName', $("#AddAudioAssetNameAJAX").val());
+			formData.append('file', $('#AudioObjectFile')[0].files[0]); // myFile is the input type="file" control
+			formData.append('SceneId', @Model.Scenes.ElementAt(Model.SelectedScene).Id);
+			var url = "/SceneEditor/UploadFile";
+		}
+
+
+		 postAndUpdate(url, formData);
+
+	}
+
+		function UpdateHotSpotObjectLink(objectId) {
+			var formData = new FormData();
+			formData.append('Linked', );
+			formData.append('ObjectId', objectId);
+		   var url = "/SceneEditor/UpdateHotSpotObjectLink";
+			postNoPostback(url, formData)
+		}
+
+	
+
+	function postNoPostback(url, formData) {
+		   $.ajax({
+			url: url,
+			type: 'POST',
+			data: formData,
+			processData: false,  // tell jQuery not to process the data
+			contentType: false,  // tell jQuery not to set contentType
+
+			   success: function (result) {
+
+
+			},
+			error: function (jqXHR) {
+			},
+               complete: function (jqXHR, status) {
+                   $('#object-editor-carousel').load('/sceneEditor/GetObjectsInScene', { sceneId: @Model.Scenes.ElementAt(Model.SelectedScene).Id });
+                   $('#existing-scenes-partial').load('/sceneEditor/GetScenes', { courseId: @Model.CourseId });
+
+			}
+		});
+        }
+
+	function postAndUpdate(url, formData) {
+		   $.ajax({
+			url: url,
+			type: 'POST',
+			data: formData,
+			processData: false,  // tell jQuery not to process the data
+			contentType: false,  // tell jQuery not to set contentType
+
+			   success: function (result) {
+
+				   $("#myEmbeddedScene").load("/SceneEditor/UpdateScene", { courseId: @Model.CourseId, selectedIndex: @Model.SelectedScene }, function () {
+					// DISCUSS THIS PART IN REPORT
+
+					   $('#object-editor-carousel').load('/sceneEditor/GetObjectsInScene', { sceneId: @Model.Scenes.ElementAt(Model.SelectedScene).Id });
+
+				   });
+
+			},
+			error: function (jqXHR) {
+			},
+			   complete: function (jqXHR, status) {
+
+			}
+		});
+	}
+
+
+    </script>
+    <script type="application/javascript" src="~/js/SceneEditor/ValidateAssetName.js"></script>
+
+
+
+</body>

@@ -1,0 +1,29 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel 
+<div class="modal-header">
+<h4 class="modal-title">Add Background Image<i class="fa fa-globe"></i></h4>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+    <div class="container">
+        @Html.AntiForgeryToken()
+
+        @if (Model.Scenes.ElementAt(Model.SelectedScene) != null)
+        {
+            //<form method="post" enctype="multipart/form-data" asp-action="UploadBackgroundImage" asp-controller="SceneEditor" asp-route-sceneId="@Model.Scenes.ElementAt(Model.SelectedScene).Id">
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+                <label for="backgroundImageFile" class="btn-lg btn-warning margin-zero"><span class="fa fa-upload fa-fw mr-3"></span>Background Image Upload</label>
+                <input class="no-display" name="backgroundImageFile" type="file" id="backgroundImageFile"  onchange="ShowPreview(this); closeModal()">
+                <button id="close-modal" class="d-none" data-dismiss="modal"></button>
+            </div>
+            //</form>
+        }
+    </div>
+</div>
+<script>
+    function closeModal() {
+        $('#close-modal').click();
+    }
+</script>

@@ -1,0 +1,232 @@
+﻿
+.scene-sidebar-separator-title {
+    background-color: white;
+    height: 45px;
+}
+
+.scene-sidebar-submenu-item {
+    border-radius: 0.2rem;
+    border-bottom: 0.2px solid white;
+}
+
+.scene-canvas {
+    border: solid 1px black;
+    padding: 0px;
+}
+
+.course-detail-card {
+    margin-bottom: 5% !important;
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+}
+
+.main-body {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.scene-card {
+    margin-top: 5% !important;
+}
+
+.scene-card-img {
+    height: 3vw;
+    object-fit: cover;
+}
+
+.editor-nav-bar {
+    min-height: 0px !important;
+    border: none !important;
+}
+
+.editor-nav-bar-item {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+
+.nav-item :hover {
+    background-color: lightgrey !important;
+}
+
+.submenu-absolute {
+    position: absolute;
+    z-index: 1;
+}
+
+.text-black {
+    color: black;
+}
+
+.no-display {
+    display: none !important;
+}
+
+.editor-btn {
+    margin: 5% !important;
+}
+
+.property-card {
+    margin: 1%;
+    width: 310px !important;
+}
+
+.property-heading {
+    display: inline-block;
+}
+
+.checkbox-interact {
+    vertical-align: inherit !important;
+    margin-bottom: 5px;
+}
+
+.panel-interact {
+    display: inline-block !important;
+    padding: 0px 2px;
+}
+
+.property-interact-lbl {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.object-value-textbox {
+    display: inline-block;
+}
+
+.replace-img-lbl {
+}
+
+.background-editor-body {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.background-colour-btn {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+.course-details {
+    padding-left: 0px !important;
+}
+
+#existing-scenes-partial {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+#main-row {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+#myEmbeddedScene {
+    height: 50vh;
+}
+
+.delete-cross {
+    width: 15px;
+    vertical-align: top !important;
+}
+
+.delete-btn {
+    position: absolute;
+    color: red !important;
+    padding-top: 3%;
+    padding-left: 5%;
+    font-size: 1.2rem;
+}
+
+.InputErrorMessage {
+    color: red;
+    font-size: 1.5rem;
+}
+
+.slick-list {
+    height: 45vh !important;
+}
+
+#AddHotSpotObjectAJAXbtn {
+    margin-top: 1%;
+}
+
+.xyz {
+    background-size: auto;
+    text-align: center;
+    padding-top: 100px;
+}
+
+.btn-circle.btn-sm {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    font-size: 8px;
+    text-align: center;
+}
+
+.btn-circle.btn-md {
+    width: 50px;
+    height: 50px;
+    padding: 7px 10px;
+    border-radius: 25px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 190px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+
+span.blue {
+    color: #2D79AF;
+}
+
+span.red {
+    color: #E74C3C;
+}

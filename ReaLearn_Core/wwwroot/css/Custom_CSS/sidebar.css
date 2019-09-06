@@ -1,0 +1,85 @@
+﻿#body-row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#sidebar-container {
+    min-height: calc(100vh);
+    background-color: white;
+    padding: 0;
+}
+
+/* Sidebar sizes when expanded and expanded */
+.sidebar-expanded {
+    
+}
+
+.list-group {
+    font-size: 1.2rem;
+}
+
+/* Menu item*/
+#sidebar-container .list-group a {
+    height: 50px;
+}
+
+/* Submenu item*/
+#sidebar-container .list-group .sidebar-submenu a {
+    padding-left: 30px;
+}
+
+.sidebar-submenu {
+    font-size: 1.1rem;
+}
+
+/* Separators */
+.sidebar-separator-title {
+    background-color: white;
+    height: 35px;
+}
+
+.sidebar-separator {
+    background-color: white;
+    height: 25px;
+}
+
+.logo-separator {
+    background-color: white;
+    height: 60px;
+}
+
+/* Closed submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
+    content: " \f0d7";
+    font-family: FontAwesome;
+    display: inline;
+    text-align: right;
+    padding-left: 10px;
+}
+/* Opened submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
+    content: " \f0da";
+    font-family: FontAwesome;
+    display: inline;
+    text-align: right;
+    padding-left: 10px;
+}
+
+/* Custom CSS */
+.custom-navbar {
+    justify-content: flex-start;
+    border-radius: 0rem;
+    margin-bottom: 0px;
+}
+
+.log-button {
+    margin: 1% !important;
+}
+
+.padding-zero {
+    padding: 0px !important;
+}
+
+.margin-zero {
+    margin: 0px !important;
+}

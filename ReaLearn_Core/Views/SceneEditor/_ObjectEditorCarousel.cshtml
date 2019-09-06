@@ -1,0 +1,499 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel
+@using ReaLearn_Core.Models.VRObjectModels
+
+<link rel="stylesheet" href="~/lib/slick-1.8.1/slick/slick.css" />
+<link rel="stylesheet" href="~/lib/slick-1.8.1/slick/slick-theme.css" />
+
+<link rel="stylesheet" href="~/css/Custom_CSS/RangeSliders.css" />
+<script src="~/lib/slick-1.8.1/slick/slick.min.js"></script>
+<link rel="stylesheet" href="~/css/Custom_CSS/objectCarousel.css" />
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-xl-2 col-sm-3 col-md-3 offset-10">
+            <div class="input-container">
+                <i class="fas fa-filter icon"></i>
+                <select class="custom-select" id="object-filter" name="Objects">
+                    <option value="All">All</option>
+                    <option value="TextObject">Text</option>
+                    <option value="ImageObject">Image</option>
+                    <option value="VideoObject">Video</option>
+                    <option value="HotSpotObject">HotSpot</option>
+                    <option value="AudioObject">Audio</option>
+                    <option value="QuestionObject">Question</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.VRObjects != null && Model.VRObjects.Count() > 0)
+{
+
+
+
+    <div class="property-editors-wrapper">
+        <div class="property-editors-slick">
+
+            @foreach (VRObject vrobject in Model.VRObjects)
+            {
+
+
+                <div class="card bg-light property-card property-card-@vrobject.ObjectType" id="property-card-@vrobject.Id">
+                    <div class="card-header padding-zero property-card-header">
+
+                        @{ string icon = null;
+                            if (vrobject.ObjectType.Equals("TextObject")) { icon = "fa fa-font"; }
+                            else if (vrobject.ObjectType.Equals("QuestionObject")) { icon = "fas fa-question-circle"; }
+                            else if (vrobject.ObjectType.Equals("ImageObject")) { icon = "fa fa-image"; }
+                            else if (vrobject.ObjectType.Equals("HotSpotObject")) { icon = "fa fa-map-marker"; }
+                            else if (vrobject.ObjectType.Equals("VideoObject")) { icon = "fa fa-film"; }
+                            else if (vrobject.ObjectType.Equals("AudioObject")) { icon = "fa fa-music"; }
+
+                        }
+
+
+                        <h5 id="assetNameHeader-@vrobject.Id" class="property-heading asset-name-@vrobject.Id asset-header">@vrobject.AssetName</h5>
+                        <i class="@icon asset-icon"></i>
+                        <input id="assetNameInput-@vrobject.Id" type="text" value="@vrobject.AssetName" class="asset-name-@vrobject.Id validateAssetInput" style="display: none;" />
+
+
+                    </div>
+                    <div class="card-header padding-zero property-card-header">
+
+                        @if (vrobject.ObjectType != "QuestionObject")
+                        {
+                            <label role="button" onclick="UpdateVRObject(@vrobject.Id, '@vrobject.ObjectType'); ChangeValue(@vrobject.Id, '@vrobject.ObjectType');" class="btn btn-info property-btn">Save</label>
+                        }
+                        else
+                        {
+                            <label role="button" onclick="UpdateVRObject(@vrobject.Id, '@vrobject.ObjectType'); ChangeValue(@vrobject.Id, '@vrobject.ObjectType'); UpdateResponses(@vrobject.Id)" class="btn btn-info property-btn">Save</label>
+                        }
+
+                        <label class="btn btn-warning property-btn" data-toggle="collapse" href="#collapse-@vrobject.Id" role="button">Edit</label>
+
+                        <div class="btn-group btn-group-carousel upload-btn-group">
+                            @if (vrobject.ObjectType == "ImageObject" || vrobject.ObjectType == "VideoObject")
+                            {
+                                <label for="replaceFile-@vrobject.Id" class="close btn-carousel ">
+                                    <i class="fa fa-upload property-icon"></i>
+                                </label>
+                                @if (vrobject.ObjectType == "ImageObject")
+                                {
+                                    <input class="no-display" id="replaceFile-@vrobject.Id" oninput="ReplaceMediaPreview(@vrobject.Id, this, '@vrobject.ObjectType')" name="replaceFile" type="file" size="1">
+
+                                }
+                                @if (vrobject.ObjectType == "VideoObject")
+                                {
+                                    <input class="no-display" id="replaceFile-@vrobject.Id" oninput="ReplaceMediaPreview(@vrobject.Id, this,'@vrobject.ObjectType')" name="replaceFile" type="file" size="1">
+
+                                }
+
+                            }
+
+                            <button type="button" onclick="ToggleAssetName(@vrobject.Id);" class="close btn-carousel edit-asset-name-icon-@vrobject.Id">
+                                <i class="fa fa-pencil property-icon"></i>
+                            </button>
+                            <button type="button" onclick="ToggleAssetName(@vrobject.Id); SaveAssetName(@vrobject.Id);" class="close btn-carousel edit-asset-name-icon-@vrobject.Id" style="display: none;">
+                                <i class="fa fa-save property-icon"></i>
+                            </button>
+                            @if (vrobject.ObjectType != "HotSpotObject" && vrobject.ObjectType != "QuestionObject")
+                            {
+                                <label for="colour-@vrobject.Id" class="close ">
+                                    <img class="colour-wheel" src="~/images/icons/RGB_color_wheel.svg"/>
+                                </label>
+
+                                <input id="colour-@vrobject.Id" type="color" class="no-display" oninput="ChangeColour(@vrobject.Id, '@vrobject.ObjectType')" />
+                            }
+
+                            <button type="button" onclick="DeleteVRObject(@vrobject.Id, '@vrobject.ObjectType');" class="close btn-carousel">
+                                <i class="fa fa-trash property-icon"></i>
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="card-body bg-light padding-zero collapse position-relative" id="collapse-@vrobject.Id">
+
+
+
+
+                        <div class="container padding-zero">
+                            <div class="row margin-zero value-row">
+                                @if (vrobject.ObjectType == "TextObject" || vrobject.ObjectType == "QuestionObject")
+                                {
+
+                                    <input id="value-@vrobject.Id" value="@vrobject.Value" type="text" class="form-control object-value-textbox w-100" />
+                                }
+                                @if (vrobject.ObjectType == "HotSpotObject")
+                                {
+                                    @if (Model.VRObjects != null)
+                                    {
+
+
+
+                                        <select class="custom-select custom-select-sm w-100" id="hotspot-object-select-update-@vrobject.Id" value="@vrobject.Value" name="hotspotlinkedobjects">
+
+                                            @foreach (var item in Model.VRObjects.Where(c => c.ObjectType != "HotSpotObject"))
+                                            {
+                                                if (item.ObjectType != "ImageObject")
+                                                {
+                                                    if (@item.Id == Convert.ToInt32(vrobject.Value))
+                                                    {
+                                                        <option selected class="object-select" value="@item.Id">@item.ObjectType : @item.Value</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option class="object-select" value="@item.Id">@item.ObjectType : @item.Value</option>
+                                                    }
+
+                                                }
+                                                if (item.ObjectType == "ImageObject")
+                                                {
+                                                    if (@item.Id == Convert.ToInt32(vrobject.Value))
+                                                    {
+                                                        <option selected class="object-select" value="@item.Id">@item.ObjectType : @item.AssetName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option class="object-select" value="@item.Id">@item.ObjectType : @item.AssetName</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+
+                                    }
+                                }
+
+                            </div>
+                            <div class="row margin-zero position-and-rotation">
+
+                                <div class="col-6 padding-zero text-center">
+                                    <h5>POSITION</h5>
+
+                                    <label for="xPos-@vrobject.Id" class="axis-label"> X</label>
+                                    <span>
+                                        <input id="xPos-@vrobject.Id" value="@vrobject.xPos" type="range" min="-5" max="5" step="0.001" class="custom-range w-75 d-inline-block position-input" oninput="ChangePosition(@vrobject.Id, '@vrobject.ObjectType', 'x')">
+                                    </span>
+
+                                    <br />
+
+
+
+                                    <label for="yPos-@vrobject.Id" class="axis-label"> Y</label>
+                                    <span>
+                                        <input id="yPos-@vrobject.Id" value="@vrobject.yPos" type="range" min="-5" max="5" step="0.001" class="custom-range w-75 d-inline-block position-input" oninput="ChangePosition(@vrobject.Id, '@vrobject.ObjectType', 'y')">
+                                    </span>
+                                    <br />
+
+                                    <label for="zPos-@vrobject.Id" class="axis-label"> Z</label>
+                                    <span>
+                                        <input id="zPos-@vrobject.Id" value="@vrobject.zPos" type="range" min="-5" max="5" step="0.001" class="custom-range w-75 d-inline-block position-input" oninput="ChangePosition(@vrobject.Id, '@vrobject.ObjectType', 'z')">
+                                    </span>
+                                </div>
+                                @if (vrobject.ObjectType != "AudioObject" && vrobject.ObjectType != "QuestionObject" && vrobject.ObjectType != "HotSpotObject")
+                                {
+                                    <div class="col-6 padding-zero  text-center">
+                                        <h5>ROTATION</h5>
+                                        <div id="canvas-@vrobject.Id" class="canvas-container " data-id="@vrobject.Id" data-type="@vrobject.ObjectType" style="margin-left: 8%;">
+
+                                        </div>
+                                    </div>
+                                }
+                                @if (vrobject.ObjectType == "QuestionObject")
+                                {
+                                    <div class="col-6 padding-zero  text-center">
+                                        @if (Model.Responses != null && Model.Responses.Count() > 0)
+                                        {
+                                        @foreach (VRQuestionResponse response in Model.Responses)
+                                        {
+                                            if (@response.VRQuestionId == vrobject.Id)
+                                            {
+
+                                                <div class="input-group response-box">
+
+                                                    <div class="input-group-text" id="responses-@vrobject.Id">
+                                                        <input id="isResponseCorrect-@response.id" name="response" checked="@response.isCorrect" type="radio" aria-label="Is Response Correct?">
+                                                    </div>
+                                                   
+                                                        <input id="@response.id" type="text" data-id="@vrobject.Id" value="@response.Response" class="form-control response" aria-label="Response Input">
+                                                    
+                                                </div>
+
+                                            }
+
+                                        }}
+                                    </div>
+                                }
+
+                                @if (vrobject.ObjectType == "AudioObject")
+                                {<div class="col-6 padding-zero  text-center">
+                                        <span>
+                                            <i class="fas fa-volume-down" style="font-size: 1.2rem"></i>
+                                            <input type="range" min="0.001" max="1" step="0.01" class="custom-range w-50 d-inline-block" oninput="ChangeVolume(@vrobject.Id, '@vrobject.ObjectType')">
+                                            <i class="fas fa-volume-up" style="font-size: 1.4rem"></i>
+
+                                        </span>
+
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="row margin-zero justify-content-center">
+
+                            @if (vrobject.ObjectType == "TextObject")
+                            {
+                                <div class="col-10 ">
+                                    <span>
+                                        <i class="fa fa-font" style="font-size: 1rem"></i>
+                                        <input id="xScale-@vrobject.Id" value="@vrobject.xScale" type="range" min="0.2" max="10" step="0.2" class="custom-range w-75 d-inline-block" oninput="ChangeFontSize(@vrobject.Id, '@vrobject.ObjectType')">
+                                        <i class="fa fa-font" style="font-size: 2rem"></i>
+
+                                    </span>
+
+                                </div>
+                            }
+
+
+                            @if (vrobject.ObjectType == "ImageObject" || vrobject.ObjectType == "VideoObject")
+                            {
+                                <div class="col-12">
+
+                                    <i class="fas fa-arrows-alt-h" style="font-size: 1rem"></i>
+                                    <input id="xScale-@vrobject.Id" value="@vrobject.xScale" type="range" min="0" max="10" step="0.1" class="custom-range d-inline-block scale-range" oninput="ChangeScale(@vrobject.Id, '@vrobject.ObjectType', 'x')">
+                                    <i class="fas fa-arrows-alt-h" style="font-size: 2rem"></i>
+
+
+
+                                </div>
+                                <div class="col-12">
+
+                                    <i class="fas fa-arrows-alt-v" style="font-size: 1rem"></i>
+                                    <input id="yScale-@vrobject.Id" value="@vrobject.yScale" type="range" min="0" max="10" step="0.1" class="custom-range d-inline-block scale-range" oninput="ChangeScale(@vrobject.Id, '@vrobject.ObjectType', 'y')">
+                                    <i class="fas fa-arrows-alt-v" style="font-size: 2rem"></i>
+
+
+
+                                </div>
+
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+            }
+        </div>
+
+    </div>
+
+
+
+}
+
+<script>
+
+
+    function ToggleAssetName(id) {
+        $('.asset-name-' + id).toggle();
+        $('.edit-asset-name-icon-' + id).toggle();
+    }
+
+    function SaveAssetName(id) {
+
+        var formData = new FormData();
+        var newAssetName = $('#assetNameInput-' + id).val();
+        if (newAssetName.length < 21) {
+            formData.append('assetName', newAssetName);
+            formData.append('id', id);
+            var url = "/SceneEditor/UpdateAssetName";
+            postNoPostback(url, formData);
+            $('#assetNameHeader-' + id).html(newAssetName);
+        }
+        else {
+            alert('Asset name cannot be over 20 characters');
+        }
+
+    }
+
+    var range = $('.input-range'),
+        value = $('.range-value');
+
+    value.html(range.attr('value'));
+
+    range.on('input', function () {
+        value.html(this.value);
+    });
+
+    $(document).ready(function () {
+        $('.property-editors-slick').slick({
+            slidesToShow: 2,
+            arrows: true,
+            swipeToSlide: false,
+            slidesToScroll: 1,
+            infinite: false,
+            draggable: false
+        });
+    });
+
+
+    $(document).ready(function () {
+        var three = THREE;
+        $('.canvas-container').each(function (index) {
+
+            var assetId = $(this).attr('data-id');
+            var objectType = $(this).attr('data-type');
+
+            if (objectType == "TextObject") {
+                var ID = "#text-" + assetId;
+            }
+            else if (objectType == "ImageObject") {
+                var ID = "#img-" + assetId;
+            }
+            else if (objectType == "VideoObject") {
+                var ID = "#vid-" + assetId;
+            }
+            else if (objectType == "HotSpotObject") {
+                var ID = "#hotspot-" + assetId;
+            }
+            else if (objectType == "AudioObject") {
+                var ID = "#audio-" + assetId;
+            }
+            else if (objectType == "QuestionObject") {
+                var ID = "#question-" + assetId;
+            }
+
+            var el = document.querySelector(ID);
+
+            var scene = new three.Scene();
+            scene.background = new THREE.Color(0xecf0f1);
+            var camera = new three.PerspectiveCamera(75, 130 / 100, 1, 500);
+
+            var renderer = new three.WebGLRenderer();
+            renderer.setSize(130, 100);
+
+            renderer.domElement.style.border = "1px solid black";
+
+            $(this).append(renderer.domElement);
+
+            var geometry = new three.BoxGeometry(2, 2, 2);
+
+            three.ImageUtils.crossOrigin = '';
+            var texture = three.ImageUtils.loadTexture('http://i.imgur.com/CEGihbB.gif');
+            texture.anisotropy = renderer.getMaxAnisotropy();
+
+            var material = new three.MeshFaceMaterial([
+                new three.MeshBasicMaterial({
+                    color: 0x2C3E50
+                }),
+                new three.MeshBasicMaterial({
+                    color: 0x95a5a6
+                }),
+                new three.MeshBasicMaterial({
+                    color: 0x18BC9C,
+
+                }),
+                new three.MeshBasicMaterial({
+                    color: 0x3498DB
+                }),
+                new three.MeshBasicMaterial({
+                    color: 0xF39C12
+                }),
+                new three.MeshBasicMaterial({
+                    color: 0xE74C3C
+                })
+            ]);
+
+            var cube = new three.Mesh(geometry, material);
+            cube.rotation.x = Math.PI / 4;
+            cube.rotation.y = Math.PI / 4;
+            scene.add(cube);
+            camera.position.z = 5;
+
+            var isDragging = false;
+            var previousMousePosition = {
+                x: 0,
+                y: 0
+            };
+            $(renderer.domElement).on('mousedown', function (e) {
+                isDragging = true;
+            })
+                .on('mousemove', function (e) {
+                    var deltaMove = {
+                        x: e.offsetX - previousMousePosition.x,
+                        y: e.offsetY - previousMousePosition.y,
+                    };
+
+                    if (isDragging) {
+                        var deltaRotationQuaternion = new three.Quaternion()
+                            .setFromEuler(new three.Euler(
+                                toRadians(deltaMove.y * 1),
+                                toRadians(deltaMove.x * 1),
+                                0,
+                                'XYZ'
+                            ));
+                        cube.quaternion.multiplyQuaternions(deltaRotationQuaternion, cube.quaternion);
+                        ChangeRotation(deltaRotationQuaternion, el);
+                    }
+
+                    previousMousePosition = {
+                        x: e.offsetX,
+                        y: e.offsetY,
+                    };
+                });
+
+            $(document).on('mouseup', function (e) {
+                isDragging = false;
+            });
+
+            window.requestAnimFrame = (function () {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 1000 / 60);
+                    };
+            })();
+
+            var lastFrameTime = new Date().getTime() / 1000;
+            var totalGameTime = 0;
+            function update(dt, t) {
+                setTimeout(function () {
+                    var currTime = new Date().getTime() / 1000;
+                    var dt = currTime - (lastFrameTime || currTime);
+                    totalGameTime += dt;
+
+                    update(dt, totalGameTime);
+
+                    lastFrameTime = currTime;
+                }, 0);
+            }
+
+            function render() {
+                renderer.render(scene, camera);
+                requestAnimFrame(render);
+            }
+
+            render();
+            update(0, totalGameTime);
+        });
+
+        function toRadians(angle) {
+            return angle * (Math.PI / 180);
+        }
+
+        function toDegrees(angle) {
+            return angle * (180 / Math.PI);
+        }
+
+    });
+</script>
+

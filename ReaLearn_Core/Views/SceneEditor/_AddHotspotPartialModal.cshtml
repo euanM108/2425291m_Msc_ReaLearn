@@ -1,0 +1,118 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel
+<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-map-marker"></i> Add HotSpot </h4>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container">
+        <h5 for="AddHotspotAssetNameAJAX">Asset Name:</h5>
+        @Html.TextBox("AddHotspotAssetNameAJAX", null, new { @class = "form-control" })
+        <br />
+        <small>Should an event be triggered by viewing or clicking?</small>
+        <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="hotspot-onlook" name="radio-stacked" required>
+            <label class="custom-control-label" for="hotspot-onlook">View</label>
+        </div>
+        <div class="custom-control custom-radio mb-3">
+            <input type="radio" class="custom-control-input" id="hotspot-onclick" name="radio-stacked" required>
+            <label class="custom-control-label" for="hotspot-onclick">Click</label>
+            <div class="invalid-feedback">More example invalid feedback text</div>
+        </div>
+
+        <small for="hotspot-action">Action Performed</small>
+        <select id="hotspot-action-select" class="custom-select custom-select-sm hotspot-action-select-class">
+            <option selected="selected" value="null">Select an action</option>
+
+            <option value="showObject">Show Object</option>
+
+            <option value="hideObject">Hide Object</option>
+
+            <option value="link">Link to Scene</option>
+
+            <option value="play">Play media</option>
+            <option value="stop">Stop media</option>
+        </select>
+        <hr />
+        <div id="object-select-container" class="action-select" style="display:none;">
+            @if (Model.VRObjects != null)
+            {
+                <h5 for="object-select">Link to object:</h5>
+                <select class="custom-select custom-select-sm" id="hotspot-object-select" name="hotspotlinkedobjects">
+
+                    @foreach (var item in Model.VRObjects.Where(c => c.ObjectType != "HotSpotObject"))
+                    {
+                        if (item.ObjectType != "ImageObject")
+                        {
+                            <option class="object-select" value="@item.Id">@item.ObjectType : @item.Value</option>
+                        }
+                        if (item.ObjectType == "ImageObject")
+                        {
+                            <option class="object-select" value="@item.Id">@item.ObjectType </option>
+                        }
+                    }
+                </select>
+            }
+            else
+            { <hr />
+                <h5>
+                    No Objects added to scene yet. Add object?
+                </h5>
+                <hr />
+                <button data-target="#addTextModal" data-toggle="modal" data-dismiss="modal" class="list-group-item list-group-item-action">
+                    <i class="fa fa-font"></i> Text
+                </button>
+                <button data-target="#addImageModal" data-toggle="modal" data-dismiss="modal" class="list-group-item list-group-item-action">
+                    <i class="fa fa-image"></i> Image
+                </button>
+                <button data-target="#addVideoModal" data-toggle="modal" data-dismiss="modal" class="list-group-item list-group-item-action">
+                    <i class="fa fa-film"></i> Video
+                </button>
+            }
+        </div>
+        <div id="video-select-container" class="action-select" style="display:none;">
+            @if (Model.VRObjects != null)
+            {
+                <h5 for="object-select">Link to media:</h5>
+                <select class="custom-select custom-select-sm" id="hotspot-video-select" name="hotspotlinkedobjects">
+
+                    @foreach (var item in Model.VRObjects.Where(c => c.ObjectType == "VideoObject" || c.ObjectType == "AudioObject"))
+                    {
+                        <option class="object-select" value="@item.Id">@item.ObjectType : @item.Value</option>
+                    }
+                </select>
+            }
+            else
+            { <hr />
+                <h5>
+                    No playable media added to scene. Add media?
+                </h5>
+                <hr />
+                <button data-target="#addVideoModal" data-toggle="modal" data-dismiss="modal" class="list-group-item list-group-item-action">
+                    <i class="fa fa-film"></i> Video
+                </button>
+                <button data-target="#addAudioModal" data-toggle="modal" data-dismiss="modal" class="list-group-item list-group-item-action">
+                    <i class="fa fa-music"></i> Audio
+                </button>
+            }
+        </div>
+        <div id="scene-select-container" class="action-select" style="display:none;">
+            <h5 for="object-select">Link to scene:</h5>
+            <select class="custom-select custom-select-sm" id="hotspot-scene-select" name="hotspotlinkedobjects">
+
+                @foreach (var scene in Model.Scenes)
+                {
+                    if (scene.Id != Model.Scenes.ElementAt(Model.SelectedScene).Id)
+                    {
+                        <option class="object-select" value="@scene.Id">@scene.Title</option>
+                    }
+
+                }
+            </select>
+
+        </div>
+        <button id="AddHotSpotObjectAJAXbtn" class="btn btn-info" data-dismiss="modal" data-loading-text=" öffnen..." autocomplete="off">Save HotSpot</button>
+    </div>
+</div>
+<script type="text/javascript" src="~/js/Custom_JS/HotSpotComponent.js"></script>

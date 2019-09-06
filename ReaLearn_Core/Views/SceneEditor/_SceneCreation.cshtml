@@ -1,0 +1,477 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel
+@using ReaLearn_Core.Models.VRObjectModels
+@using System.Text
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<script type="application/javascript" src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+	<script type="application/javascript" src="https://unpkg.com/aframe-look-at-component@0.8.x/dist/aframe-look-at-component.min.js"></script>
+    <style>
+        #main-container{
+            padding: 10px;
+        }
+
+        #add-asset-btn{
+            z-index: 1;
+        }
+
+        .dropdown-assets{
+            left:3vh;
+            top: 3vh; 
+            font-size: 15px;
+            z-index: 2;
+        }
+
+        #save-all-btn{
+            padding: 10px;
+        }
+
+        #change-background-dropdown{
+            float:left; 
+            padding: 10px;
+        }
+
+        .scene-editor-btn{
+            z-index: 1; 
+            cursor: pointer;
+        }
+
+        #change-bacground-dropwdown-content{
+            left:4vh; 
+            top: 4vh; 
+            font-size: 15px; 
+            z-index: 2;
+        }
+
+        #export-container{
+            padding: 10px;
+        }
+    </style>
+	<script>
+        
+        AFRAME.registerComponent('hoverable', {
+            
+
+            init: function () {
+                var entity = this.el;
+                console.log('is hovering');
+                entity.addEventListener('mouseenter', function (event) {
+                    entity.setAttribute('text', 'color', '#FF0000');
+                });
+                 entity.addEventListener('mouseleave', function (event) {
+                    entity.setAttribute('text', 'color', '#FFFFFF');
+				    });
+            }
+        });
+
+
+		AFRAME.registerComponent('hotspot-action', {
+			schema: {
+				action: { type: 'string', default: '' },
+				linkedobject: { type: 'string', default: '' },
+				onclick: { type: 'string', default: '' },
+			},
+
+			init: function () {
+
+				var entity = this.el;
+				var data = this.data;
+				var linkedEntity = null;
+				var action = null;
+
+				if (document.getElementById('img-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('img-' + data.linkedobject);
+				}
+				else if (document.getElementById('text-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('text-' + data.linkedobject);
+				}
+                else if (document.getElementById('videofile-' + data.linkedobject) != null && (data.action == 'play' || data.action == 'stop')) {
+					linkedEntity = document.getElementById('videofile-' + data.linkedobject);
+                }
+                 else if (document.getElementById('vid-' + data.linkedobject) != null && (data.action == 'showObject' || data.action == 'hideObject')) {
+					linkedEntity = document.getElementById('vid-' + data.linkedobject);
+				}
+				else if (document.getElementById('audiofile-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('audiofile-' + data.linkedobject);
+				}
+				 else if (document.getElementById('question-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('question-' + data.linkedobject);
+                }
+
+                if (linkedEntity != null && linkedEntity != undefined) {
+                    if (data.action == "showObject") {
+
+                        linkedEntity.setAttribute('visible', false);
+
+                        if (data.onclick == "True") {
+
+                            entity.addEventListener('click', function (event) {
+                                linkedEntity.setAttribute('visible', 'true');
+
+                            });
+                        }
+                        else if (data.onclick == "False") {
+
+                            entity.addEventListener('mouseenter', function (event) {
+                                linkedEntity.setAttribute('visible', 'true');
+                            });
+
+                        }
+
+                    }
+                    if (data.action == "hideObject") {
+                        linkedEntity.setAttribute('visible', true);
+                        if (data.onclick == "True") {
+                            entity.addEventListener('click', function (event) {
+                                linkedEntity.setAttribute('visible', 'false');
+                            });
+                        } else {
+                            entity.addEventListener('mouseenter', function (event) {
+                                linkedEntity.setAttribute('visible', 'false');
+                            });
+                        }
+
+                    }
+                   
+                    if (data.action == "play") {
+                        if (data.onclick == "True") {
+                            entity.addEventListener('click', function (event) {
+                                linkedEntity.play();
+                            });
+                        } else {
+                            entity.addEventListener('mouseenter', function (event) {
+                                linkedEntity.play();
+                            });
+                        }
+                    }
+                    if (data.action == "stop") {
+                        if (data.onclick == "True") {
+                            linkedEntity.stop();
+                        }
+                        else {
+                            linkedEntity.stop();
+                        }
+                    }
+
+                }
+
+                if (data.action == "link") {
+                  if (data.onclick == "True") {
+                      entity.addEventListener('click', function (event) {
+                          window.location.href = "/SceneEditor/SceneEditor/?courseId=" +@Model.CourseId + "&selectedIndex=" + data.linkedEntity;
+                        });
+                  }
+                  else {
+                      entity.addEventListener('mouseenter', function (event) {
+                         window.location.href = "/SceneEditor/SceneEditor/?courseId=" +@Model.CourseId + "&selectedIndex=" + data.linkedEntity;
+                        });
+                    }
+                }
+			}
+		});
+
+	   
+
+</script>
+</head>
+<body>
+    <div class="pull-left position-absolute">
+        <div class="dropdown">
+            <div id="main-container" class="container">
+                <span id="add-asset-btn" class="fa-stack fa-lg blue" href="#circles" data-toggle="collapse" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-circle fa-stack-2x "></i>
+                    <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                </span>
+            </div>
+            <div class="dropdown-content list-group dropdown-assets" >
+
+                <button data-target="#addBackgroundImageModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-globe"></i> Background Image
+                </button>
+                <button data-target="#addTextModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-font"></i> Text
+                </button>
+                <button data-target="#addQuestionModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fas fa-question-circle"></i> Question
+                </button>
+                <button data-target="#addImageModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-image"></i> Image
+                </button>
+                <button data-target="#addHotSpotModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-map-marker"></i> HotSpot
+                </button>
+                <button data-target="#addVideoModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-film"></i> Video
+                </button>
+                <button data-target="#addAudioModal" data-toggle="modal" class="list-group-item list-group-item-action model-opener">
+                    <i class="fa fa-music"></i> Audio
+                </button>
+            </div>
+        </div>
+
+
+        <div id="save-all-btn" class="container" >
+
+            <span title="Save ALL!" id="SaveAllAJAXbtn" class="fa-stack fa-lg blue scene-editor-btn">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-save fa-stack-1x fa-inverse"></i>
+            </span>
+
+        </div>
+
+        <div class="dropdown">
+            <div id="change-background-dropdown" class="container" >
+
+                <span class="fa-stack fa-lg blue scene-editor-btn" >
+                    <i class="fa fa-circle fa-stack-2x "></i>
+                    <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
+                </span>
+                <div id="change-bacground-dropwdown-content" class="dropdown-content list-group" >
+                    <button data-target="#addBackgroundImageModal" data-toggle="modal" class="list-group-item list-group-item-action">
+                        Change Background
+                    </button>
+
+                    <label for="colour-background" class="list-group-item list-group-item-action" role="button">
+                        Background Colour
+                    </label>
+                    <input id="colour-background" type="color" class="no-display" oninput="ChangeBackgroundColour()" />
+                </div>
+
+            </div>
+        </div>
+
+        <div id="export-container" class="container">
+            <span title="Export your Course!" id="ExportAJAXbtn" class="fa-stack fa-lg red scene-editor-btn" >
+                <i class="fa fa-circle fa-stack-2x "></i>
+                <i class="fas fa-file-download fa-stack-1x fa-inverse"></i>
+            </span>
+        </div>
+    </div>
+
+    <a-scene embedded>
+        <a-entity oculus-go-controls="hand: right" raycaster="objects: .clickable" laser-controls></a-entity>
+        <a-entity camera look-controls>
+            <a-entity cursor="fuse: true;
+							  fuseTimeout: 2000"
+                      position="0 0 -0.3"
+                      geometry="primitive: ring;
+								radiusInner: 0.002;
+								radiusOuter: 0.004"
+                      material="color: black;
+								shader: flat">
+            </a-entity>
+        </a-entity>
+        <a-assets>
+            <img id="impPrev">
+            @if (Model.Backgrounds.Count() > 0)
+            {
+                @if (Model.Backgrounds.ElementAt(Model.SelectedScene) != null)
+                {
+
+                    @if (Model.Backgrounds.ElementAt(Model.SelectedScene).Img != null)
+                    {
+                        var base64 = Convert.ToBase64String(Model.Backgrounds.ElementAt(Model.SelectedScene).Img);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                        <img id="background-image" src="@imgSrc" />
+
+                    }
+                    else
+                    {
+                        <img id="background-image" />
+                    }
+
+                }
+
+            }
+
+            else
+            {
+                <img id="background-image" src="#" />}
+            }
+
+
+            @if (Model.VRObjects != null)
+            {
+                <!-- MEDIA OBJECT's WILL ONLY WORK WITH DEPLOYMENT, AS MEDIA SHOULD NOT BE STORED DIRECTLY IN THE SOLUTION,
+                    THEY CANNOT BE ACCESSED BY BROWSERS DUE TO CORS POLICY - STILL WORKS WHEN EXPORTED, BUT CANNOT ACCESS C:/ 
+
+
+        @foreach (VRObject item in Model.VRObjects.Where(c => c.ObjectType == "AudioObject"))
+        {
+            <audio id="audiofile-Item.Id" src="MEDIA/AUDIO/item.Value" preload="auto"></audio>
+        }
+
+                @foreach (VRObject item in Model.VRObjects.Where(c => c.ObjectType == "VideoObject"))
+                {
+                    <video id="videofile-item.Id" src="~/Video/Waterfall.mp4" preload="auto"></video>
+
+                }
+                                           -->
+            }
+
+            <img id="hotSpotIcon" src="~/images/icons/hotspot.svg" />
+            <img id="nextSceneIcon" src="~/images/icons/next-scene.svg" />
+            <img id="playicon" src="https://img.icons8.com/flat_round/64/000000/play--v5.png" />
+            <img id="soundicon" src="~/images/icons/sound.svg" />
+        </a-assets>
+
+
+        @if (Model.Backgrounds != null)
+        {
+            @if (Model.Backgrounds.ElementAt(Model.SelectedScene) != null)
+            {
+                @if (Model.Backgrounds.ElementAt(Model.SelectedScene).Colour != null)
+                {
+
+                    <a-sky id="sky" src="#background-image" color="@Model.Backgrounds.ElementAt(Model.SelectedScene).Colour"></a-sky>
+
+                }
+
+                else
+                {
+                    <a-sky id="sky" src="#background-image"></a-sky>
+                }
+            }
+        }
+        else
+        {
+            <a-sky id="sky"></a-sky>
+        }
+
+        @if (Model.VRObjects != null)
+        {
+            @foreach (VRObject item in Model.VRObjects)
+            {
+                if (item.ObjectType == "TextObject")
+                {
+
+
+                    <a-entity id="text-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                              scale="@item.xScale @item.xScale 0.1"
+                              text="value: @item.Value; shader: msdf;
+									  font: https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/archivo/Archivo-Regular.json;
+									  color: @item.Colour;
+									  align: center;
+									  wrapCount: 40"
+                              material="shader: flat; visible: false">
+
+                    </a-entity>
+                }
+                if (item.ObjectType == "VideoObject")
+                {
+                   
+                    <a-video id="vid-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                             scale="@item.xScale @item.yScale @item.zScale"
+                             src="#videofile-@item.Id" color="@item.Colour"></a-video>
+
+                }
+                if (item.ObjectType == "ImageObject")
+                {
+
+
+                    var base64 = @item.Value;
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                    <a-image id="img-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                             scale="@item.xScale @item.yScale @item.zScale"
+                             src="@imgSrc" color="@item.Colour">
+                    </a-image>
+                }
+
+                if (item.ObjectType == "AudioObject")
+                {
+                    <a-entity id="audio-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                              sound="src: #audiofile-@item.Id; volume: 1;"><a-image look-at="[camera]" scale="0.1 0.1 0.1" src="#soundicon"></a-image></a-entity>
+                }
+
+
+            }
+        }
+
+        @if (Model.VRHotspots != null)
+        {
+            @foreach (VRHotspot item in Model.VRHotspots)
+            {
+                @if (item.Action == "link")
+                {
+                    <a-plane look-at="[camera]" animation="property: scale; from: 0.2 0.2 0.2; to: 0.21 0.21 0.21; loop: true; dur: 1000; easing: easeInOutElastic " scale="0.2 0.2 0.2" class="clickable" hotspot-action="action: @item.Action; linkedobject:@item.Value;" material="visible: false" id="hotspot-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot">
+                        <a-image scale="1 1 0.1"
+                                 src="#nextSceneIcon" color="#FFFFFF">
+                        </a-image>
+                    </a-plane>
+                }
+                else
+                {
+                    <a-plane look-at="[camera]" scale="0.2 0.2 0.2" class="clickable" hotspot-action="action: @item.Action; linkedobject:@item.Value; onclick:@item.OnClick;" material="visible: false" id="hotspot-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot">
+                        <a-image scale="1 1 0.1"
+                                 src="#hotSpotIcon" color="#FFFFFF">
+                        </a-image>
+
+
+
+                    </a-plane>
+                }
+
+
+            }
+        }
+
+        @if (Model.VRQuestionCards != null)
+        {
+            @foreach (VRQuestionCard item in Model.VRQuestionCards)
+            {
+                <a-entity id="question-@item.Id" look-at="[camera]" position="@item.xPos @item.yPos @item.zPos" scale="@item.xScale @item.yScale 0.01"
+                          geometry="primitive: plane"
+                          material="color: #000">
+                    <a-entity id="question-text-@item.Id" position="0 0.4 0.01"
+                              text="align: center; font: dejavu; value: @item.Value">
+                    </a-entity>
+
+
+                    @if (Model.Responses != null)
+                    {
+                        var i = 0.2;
+                        if (Model.Responses.Count() > 0)
+                        {
+                            @foreach (VRQuestionResponse response in Model.Responses.Where(c => c.VRQuestionId == @item.Id))
+                            {
+                                @if (response.Response != null)
+                                {
+
+                                    <a-entity class="clickable" hoverable id="response-@response.id" position="0 @i 0.01"
+                                              text="value: @response.Response">
+                                    </a-entity>
+
+                                    i -= 0.2;
+                                }
+                            }
+                        }
+
+                    }
+                </a-entity>
+            }
+        }
+    </a-scene>
+
+
+    <script type="application/javascript" src="~/lib/jquery/dist/jquery.js" crossorigin="anonymous"></script>
+</body>
+</html>
+<script>
+	function ChangeBackgroundColour() {
+		var colour = $("#colour-background").val();
+
+		var ID = "#sky";
+		var el = document.querySelector(ID);
+		el.setAttribute('color', colour);
+
+		var url = "/SceneEditor/UpdateBackground";
+
+		$.post(url, { colour: colour, sceneId: @Model.Scenes.ElementAt(Model.SelectedScene).Id}, function (data) {
+
+		});
+
+	}
+</script>

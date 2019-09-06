@@ -1,0 +1,228 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model ReaLearn_Core.Models.ViewModels.ViewUsersViewModel
+@{
+    ViewBag.Title = "ViewUsers";
+}
+
+<link href="~/css/Custom_CSS/ViewUsers.css" />
+<div id="main-jumbotron" class="jumbotron bg-transparent offset-2" >
+    <div class="row font-size-large bg-white rounded">
+
+        <div class="col row-heading-font">
+            <table id="users-table" class="table table-hover border-left border-right table-font shadow">
+                <thead class="bg-light">
+                    <tr class="row-heading-font">
+                        <th scope="col" class="font-weight-normal hidden-xs hidden-sm">User name</th>
+                        <th scope="col" class="font-weight-normal">Name</th>
+                        <th scope="col" class="font-weight-normal hidden-xs hidden-sm">Role</th>
+                        <th scope="col" class="font-weight-normal">Email</th>
+                        <th scope="col" class="font-weight-normal row-action-heading">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-transparent">
+                    @if (Model.Users != null)
+                    {
+                        @foreach (var item in Model.Users)
+                        {
+                            @if (@UserManager.GetRolesAsync(item).Result.Single().ToString() != "Admin")
+                            {
+                                <tr id="row-@item.Id" class="row-data-font">
+                                    <td class="hidden-xs hidden-sm">@item.UserName</td>
+                                    <td>@item.FirstName @item.LastName</td>
+                                    <td class="hidden-xs hidden-sm">@UserManager.GetRolesAsync(item).Result.Single().ToString()</td>
+                                    <td class="">@item.Email</td>
+                                    <td>
+                                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                <button class="btn btn-success EditUserBtn" data-toggle="modal" data-target="#EditUserModal" data-id="@item.Id" data-Email="@item.Email" data-FName="@item.FirstName" data-LName="@item.LastName" data-UserName="@item.UserName" data-role="@UserManager.GetRolesAsync(item).Result.Single().ToString()">Edit</button>
+                                            </div>
+                                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                                <button data-id="@item.Id" data-name="@item.FirstName @item.LastName" data-toggle="modal" data-target="#DeleteUserModal" class="btn btn-md btn-danger DeleteUserBtn">
+                                                    Delete
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+
+            </table>
+            <button type="submit" data-toggle="modal" data-target="#AddUserModal" class="btn btn-md btn-warning pull-right">
+                Add user
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="DeleteUserModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete User</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <h5 id="DeleteUserDetails"></h5>
+
+                <div class="container">
+                     @Html.AntiForgeryToken()
+                    <input id="delete-user-text" autocomplete="off" autofocus class="form-control" type="text" />
+                    <small for="delete-user">Please enter the users full name to confirm deletion.</small>
+                    <br />
+                    <hr />
+                    <button id="deleteUserAjaxBtn" class="btn btn-danger">Delete User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AddUserModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h2 class="modal-title">Register A New User</h2>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    @Html.AntiForgeryToken()
+
+
+                    <form asp-action="ViewUsers">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RegisterUserViewModel.FirstName"></label>
+                                    <input asp-for="RegisterUserViewModel.FirstName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="RegisterUserViewModel.FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RegisterUserViewModel.LastName"></label>
+                                    <input asp-for="RegisterUserViewModel.LastName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="RegisterUserViewModel.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RegisterUserViewModel.UserName"></label>
+                                    <input asp-for="RegisterUserViewModel.UserName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="RegisterUserViewModel.UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RegisterUserViewModel.Email"></label>
+                                    <input asp-for="RegisterUserViewModel.Email" class="form-control form-control-sm" />
+                                    <span asp-validation-for="RegisterUserViewModel.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="RegisterUserViewModel.Password"></label>
+                            <input type="password" asp-for="RegisterUserViewModel.Password" class="form-control  form-control-sm" />
+                            <span asp-validation-for="RegisterUserViewModel.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="RegisterUserViewModel.ConfirmPassword"></label>
+                            <input type="password" asp-for="RegisterUserViewModel.ConfirmPassword" class="form-control  form-control-sm" />
+                            <span asp-validation-for="RegisterUserViewModel.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+
+                            <input type="submit" class="btn btn-primary" value="Register" />
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="EditUserModal" class="fade modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit User Details</h2>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateUser">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.FirstName"></label>
+                                <input id = "EditUserFirstNameInput"  asp-for="EditUserViewModel.FirstName" class="form-control form-control-sm" />
+                                <span asp-validation-for="EditUserViewModel.FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.LastName"></label>
+                                <input id = "EditUserLastNameInput"  asp-for="EditUserViewModel.LastName" class="form-control form-control-sm" />
+                                <span asp-validation-for="EditUserViewModel.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.Email"></label>
+                                <input id="EditUserEmailInput" asp-for="EditUserViewModel.Email" class="form-control form-control-sm" />
+                                <span asp-validation-for="EditUserViewModel.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.UserName"></label>
+                                <input id = "EditUserNameInput"  asp-for="EditUserViewModel.UserName" class="form-control form-control-sm" />
+                                <span asp-validation-for="EditUserViewModel.UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="UpdateUserBtn" class="btn btn-lg btn-secondary d-none d-md-inline-block">
+                            Save Changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js" crossorigin="anonymous"></script>
+
+<script src="~/js/Custom_JS/ViewUsers.js"></script>>
+  

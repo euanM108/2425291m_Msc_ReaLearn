@@ -1,0 +1,189 @@
+﻿@model ReaLearn_Core.Models.ViewModels.DashboardViewModel
+
+    <script type="application/javascript" src="~/lib/jquery/dist/jquery.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="~/css/Custom_CSS/dashboard.css"/>
+<body>
+    <div class="row padding-zero margin-zero">
+        <div class="col-8 offset-2 ">
+            <div class="container-fluid ">
+                <div class="row">
+
+                    @if (Model.Courses != null)
+                    {
+
+                        @if (Model.Courses.Count() > 0)
+                        {
+                            int i = 0;
+                            @foreach (Course item in @Model.Courses)
+                            {
+
+                                <div id="card-column" class="col-3">
+                                    <div class="card">
+                                        @if (Model.Images != null)
+                                        {
+                                            @if (Model.Images.Count() > 0)
+
+                                            {
+                                                @if (Model.Images.ElementAt(i) != null)
+                                                {
+                                                    @if (Model.Images.ElementAt(i).Img != null)
+                                                    {
+                                                        var base64 = Convert.ToBase64String(Model.Images.ElementAt(i).Img);
+                                                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                                        <img src="@imgSrc" alt="..." class="card-img-top scene-card-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="card-img-top bg-light scene-card-img">
+
+                                                        </div>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="card-img-top bg-light scene-card-img">
+
+                                                    </div>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="card-img-top bg-light scene-card-img">
+
+                                                </div>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="card-img-top bg-light scene-card-img">
+
+                                            </div>
+
+                                        }
+                                        <div class="card-body">
+                                            <h4 class="card-title">@item.Name</h4>
+                                            <p class="card-text">@item.Description</p>
+                                            <div class="text-center">
+                                                <a asp-action="SceneEditor" asp-controller="SceneEditor" asp-route-courseId="@item.Id" asp-route-selectedIndex="0" class="btn padding-zero"><img src="~/images/svg/rocket.svg" /></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                i++;
+
+                            }
+                        }
+                        else
+                        {
+                            if (Model.Courses.Count() == 0)
+                            {
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <div class="col-sm-5 col-md-6 col-lg-3 col-x-3" style="margin-top:1%;">
+                                        <div class="card">
+
+                                            <img src="~/images/venice-demo.jpeg" alt="..." class="card-img-top scene-card-img">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Your courses will appear here!</h4>
+                                                <p class="card-text">You've not created anything yet, click below to add a course!</p>
+                                                <div class="text-center">
+
+                                                    <a href="#addCourseModal" data-toggle="modal" class="fa-stack fa-lg" style="z-index: 1;">
+                                                        <i class="fa fa-circle fa-stack-2x text-warning"></i>
+                                                        <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if (Model.Courses.Count() == 0)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <h1>Add new course option</h1>
+                            }
+                        }
+                    }
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div id="addCourseModal" class="fade modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h4 class="modal-title">Create A New Course</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+
+                    
+                        <div class="form-group">
+
+                            <label>Course name</label>
+                            <input class="form-control" id="titleInput" />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input class="form-control" id="descriptionInput"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="save-course-btn" class="btn btn-lg btn-secondary d-none d-md-inline-block">
+                                Save Course
+                            </button>
+                        </div>
+
+                    
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#save-course-btn').on('click', function () {
+        var formData = new FormData();
+
+        formData.append('CourseName', $('#titleInput').val());
+        formData.append('CourseDescription', $('#descriptionInput').val());
+        var url = "/Course/AddCourse";
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,  
+            contentType: false,  
+            success: function (result) {
+                location.reload();
+            }
+
+        });
+    });
+</script>

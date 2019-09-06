@@ -1,0 +1,8 @@
+﻿#existing-scene-card-container {
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+#addSceneModal {
+    z-index: 1 !important;
+}

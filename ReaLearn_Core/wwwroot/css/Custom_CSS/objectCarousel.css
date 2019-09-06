@@ -1,0 +1,85 @@
+﻿.property-card-header {
+    min-height: 5vh;
+}
+
+.btn-carousel {
+    color: black !important;
+    margin: 1%;
+    padding: 3px !important;
+    font-size: 1.5rem;
+}
+
+.btn-group-carousel {
+    padding: 1%;
+}
+
+.range-for-position {
+    padding-top: 1vh;
+}
+
+.value-row {
+    width: 100%;
+}
+
+.axis-label {
+    float: left !important;
+    margin-bottom: 0rem;
+    padding-left: 1vh;
+}
+
+.scale-range {
+    width: 79%;
+}
+
+.input-container {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.icon {
+    padding: 10px;
+    background-color: white;
+    color: black;
+    min-width: 50px;
+    text-align: center;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+}
+
+#object-filter {
+    border-radius: 0px;
+}
+
+.asset-icon {
+    float: right;
+    font-size: 1.5rem;
+    padding: 2%;
+    margin: 0.5%
+}
+
+.asset-header {
+    padding: 0.5%;
+}
+
+.upload-btn-group {
+    float: right;
+}
+
+.colour-wheel {
+    width: 25px;
+}
+
+.position-and-rotation {
+    padding-top: 1vh;
+}
+
+.position-input {
+    display: block;
+    overflow: hidden;
+}

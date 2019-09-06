@@ -1,0 +1,26 @@
+﻿.jumbotron-panel {
+    padding: 1%;
+    margin: 1%;
+}
+
+.font-size-large {
+    font-size: large;
+}
+
+.table-font {
+    color: #333;
+    font-size: 15px;
+}
+
+.row-heading-font {
+    font-family: Montserrat, sans-serif;
+}
+
+.row-data-font {
+    font-size: small;
+    font-family: Montserrat, sans-serif;
+}
+
+.row-action-heading {
+    text-align: center;
+}

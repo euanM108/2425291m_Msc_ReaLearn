@@ -1,0 +1,55 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-font"></i>Add Question</h4>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container">
+
+
+        <h5 for="AddQuestionObjectAJAX">Question:</h5>
+        <div class="input-group-text">
+            <input id="QuestionText" type="text" class="form-control"  autocomplete="off">
+        </div>
+
+        <div class="container">
+            <small>Enter question responses and select the correct answer:</small>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input id="isResponseOneCorrect" name="response" type="radio" aria-label="Is Response Correct?">
+                    </div>
+                </div>
+                <input id="ResponseOneText" type="text" class="form-control" aria-label="Response Input" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input id="isResponseTwoCorrect" name="response" type="radio" aria-label="Is Response Correct?">
+                    </div>
+                </div>
+                <input id="ResponseTwoText" type="text" class="form-control" aria-label="Response Input"  autocomplete="off">
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input id="isResponseThreeCorrect" name="response" type="radio" aria-label="Is Response Correct?">
+                    </div>
+                </div>
+                <input id="ResponseThreeText" type="text" class="form-control" aria-label="Response Input"  autocomplete="off">
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input id="isResponseFourCorrect" name="response" type="radio" aria-label="Is Response Correct?">
+                    </div>
+                </div>
+                <input id="ResponseFourText" type="text" class="form-control" aria-label="Response Input"  autocomplete="off">
+            </div>
+        </div>
+
+        <button id="AddQuestionObjectAJAX" class="btn-lg btn-info" data-loading-text=" öffnen..." data-dismiss="modal" autocomplete="off">Save Question</button>
+
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@model ReaLearn_Core.Models.ViewModels.RegisterCustomerViewModel
+@{
+    ViewBag.Title = "Register";
+}
+<link rel="stylesheet" href="~/css/Custom_CSS/Register.css" />
+<div class="container">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 offset-4">
+            <div class="card registration-card">
+                
+                    <h3 class="card-header text-xs-center">Register for ReaLearn</h3>
+               
+                <div class="card-block">
+
+                    @using (Html.BeginForm("Register", "Customer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                    <section>
+                        <form method="post">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CustomerName"></label>
+                                        <input asp-for="CustomerName" class="form-control form-control-sm" autocomplete="off" />
+                                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="UserName"></label>
+                                        <input asp-for="UserName" class="form-control form-control-sm" autocomplete="off"/>
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input asp-for="Email" class="form-control  form-control-sm" autocomplete="off" />
+                                <span asp-validation-for="Email" class="text-danger "></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" class="form-control  form-control-sm" autocomplete="off"/>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ConfirmPassword"></label>
+                                <input asp-for="ConfirmPassword" class="form-control  form-control-sm" autocomplete="off"/>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+
+                                <input type="submit" class="btn btn-primary" value="Register" autocomplete="off"/>
+
+                            </div>
+                        </form>
+                    </section>
+
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

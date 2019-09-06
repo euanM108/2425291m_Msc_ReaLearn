@@ -1,0 +1,129 @@
+﻿@model ReaLearn_Core.Models.ViewModels.SceneEditorViewModel
+<style>
+    #existing-scene-card-container{
+          max-height: 800px;
+		overflow-y: auto;
+    }
+</style>
+<div class="existing-scenes">
+	<span class="list-group-item scene-sidebar-separator-title text-muted rounded-0">
+		<h5 id="scene-editor-header" class="text-center">SCENES</h5>
+	</span>
+	<div id="existing-scene-card-container">
+		@if (Model.Scenes != null)
+		{
+			int i = 0;
+			@foreach (Scene scene in @Model.Scenes)
+			{
+
+				<div class="col scene-card">
+
+					<div class="card bg-white shadow">
+
+						<div id="deletescenecollapse-@scene.Id" class="collapse">
+							<div class="container bg-white padding-zero">
+								<div class="text-center">
+									<button id="delete-scene-btn" onclick="DeleteScene(@scene.Id)" class="btn-sm btn-danger padding-zero">Delete Scene</button>
+								</div>
+							</div>
+						</div>
+						@if (Model.Backgrounds.Count() > 0)
+						{
+							@if (Model.Backgrounds.ElementAt(i) != null)
+							{
+							
+								@if (Model.Backgrounds.ElementAt(i).Img != null)
+								{
+									var base64 = Convert.ToBase64String(Model.Backgrounds.ElementAt(i).Img);
+									var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+									<img src="@imgSrc" alt="..." class="card-img-top scene-card-img">
+								}
+								else
+								{
+									<div class="card-img-top bg-light scene-card-img"></div>}
+								}
+							}
+							else
+							{
+							<div class="card-img-top bg-light scene-card-img"></div>
+							}
+					
+						<div class="text-center">
+							<a asp-action="SceneEditor" asp-controller="SceneEditor" asp-route-courseId="@Model.CourseId" asp-route-selectedIndex="@i" class="btn padding-zero"><img src="~/images/svg/rocket.svg" /></a>
+							<a href="#deletescenecollapse-@scene.Id" data-toggle="collapse" class="close delete-btn" aria-label="Close">
+								<i class="fa fa-trash"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				i++;
+			}
+		}
+	</div>
+	<hr />
+
+	<div class="text-center">
+
+
+		<a href="#addSceneModal" data-toggle="modal" class="fa-stack fa-lg">
+			<i class="fa fa-circle fa-stack-2x text-warning"></i>
+			<i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+		</a>
+
+
+	</div>
+
+
+	<div id="addSceneModal" class="fade modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content bg-light">
+				<div class="modal-header">
+					<h4 class="modal-title">Add New Scene</h4>
+					<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+
+						<small for="AddSceneAJAX">Scene Title:</small>
+						@Html.TextBox("AddSceneAJAX", null, new { @class = "form-control" })
+
+						<button id="AddSceneAJAXbtn" class="btn btn-warning editor-btn" data-loading-text=" öffnen..." data-dismiss="modal" autocomplete="off">Add Scene</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<script>
+	// ADD NEW SCENE TO DATBASE
+	$('#AddSceneAJAXbtn').click(function () {
+		
+			var url = "/SceneEditor/SaveScene";
+			var courseId = @Model.CourseId;
+			var titleText = $("#AddSceneAJAX").val();
+			$.post(url, { title: titleText, courseId: courseId }, function (data) {
+				$('#existing-scenes-partial').load('/sceneEditor/GetScenes', { courseId: courseId });
+				
+                $('#object-editor-carousel').load('/sceneEditor/GetObjectsInScene', { sceneId: @Model.Scenes.ElementAt(Model.SelectedScene).Id });
+                 $("#myEmbeddedScene").load("/SceneEditor/UpdateScene", { courseId: @Model.CourseId, selectedIndex: @Model.SelectedScene });
+			});
+
+    })
+
+    function DeleteScene(id) {
+				if (@Model.Scenes.Count() > 1) {
+
+					var url = "/SceneEditor/DeleteScene";
+					$.post(url, { sceneId: id }, function (data) {
+						$('#existing-scenes-partial').load('/sceneEditor/GetScenes', { courseId: @Model.CourseId  });
+					});
+				}
+				else {
+					alert("Cannot delete last scene.");
+				}
+			}
+</script>

@@ -1,0 +1,17 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-film"></i> Add Video</h4>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container">
+        <h5 for="AddVideoAssetNameAJAX">Asset Name:</h5>
+        @Html.TextBox("AddVideoAssetNameAJAX", null, new { @class = "form-control" })
+        <br />
+        <label for="VideoObjectFile" class="btn-lg btn-warning margin-zero"><span class="fa fa-upload fa-fw mr-3"></span>Video Object</label>
+        <input class="no-display" id="VideoObjectFile" name="file" type="file" size="1">
+
+        <p class="InputErrorMessage">Please enter an asset name.</p>
+    </div>
+</div>

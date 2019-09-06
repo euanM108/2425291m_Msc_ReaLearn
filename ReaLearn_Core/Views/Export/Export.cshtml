@@ -1,0 +1,304 @@
+﻿@model ReaLearn_Core.Models.ExportModel
+@using ReaLearn_Core.Models.VRObjectModels
+@using System.Text
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Export</title>
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.x/dist/aframe-look-at-component.min.js"></script>
+
+    <script>
+
+        AFRAME.registerComponent('hoverable', {
+
+
+            init: function () {
+                var entity = this.el;
+                console.log('is hovering');
+                entity.addEventListener('mouseenter', function (event) {
+                    entity.setAttribute('text', 'color', '#FF0000');
+                });
+                 entity.addEventListener('mouseleave', function (event) {
+                    entity.setAttribute('text', 'color', '#FFFFFF');
+				    });
+            }
+        });
+
+
+		AFRAME.registerComponent('hotspot-action', {
+			schema: {
+				action: { type: 'string', default: '' },
+				linkedobject: { type: 'string', default: '' },
+				onclick: { type: 'string', default: '' },
+			},
+
+			init: function () {
+
+				var entity = this.el;
+				var data = this.data;
+				var linkedEntity = null;
+				var action = null;
+                alert(data.linkedobject);
+				if (document.getElementById('img-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('img-' + data.linkedobject);
+				}
+				else if (document.getElementById('text-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('text-' + data.linkedobject);
+				}
+				else if (document.getElementById('videofile-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('videofile-' + data.linkedobject);
+				}
+				else if (document.getElementById('audiofile-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('audiofile-' + data.linkedobject);
+				}
+				 else if (document.getElementById('question-' + data.linkedobject) != null) {
+					linkedEntity = document.getElementById('question-' + data.linkedobject);
+                }
+
+
+                if (linkedEntity != null && linkedEntity != undefined) {
+                    if (data.action == "showObject") {
+
+                        linkedEntity.setAttribute('visible', false);
+
+                        if (data.onclick == "True") {
+
+                            entity.addEventListener('click', function (event) {
+
+                                linkedEntity.setAttribute('visible', 'true');
+
+                            });
+                        }
+                        else if (data.onclick == "False") {
+
+                            entity.addEventListener('mouseenter', function (event) {
+
+                                linkedEntity.setAttribute('visible', 'true');
+                            });
+
+                        }
+
+                    }
+                    if (data.action == "hideObject") {
+                        linkedEntity.setAttribute('visible', true);
+                        if (data.onclick == "True") {
+                            entity.addEventListener('click', function (event) {
+                                linkedEntity.setAttribute('visible', 'false');
+                            });
+                        } else {
+                            entity.addEventListener('mouseenter', function (event) {
+                                linkedEntity.setAttribute('visible', 'false');
+                            });
+                        }
+
+                    }
+
+                    if (data.action == "play") {
+                        if (data.onclick == "True") {
+                            entity.addEventListener('click', function (event) {
+                                linkedEntity.play();
+                            });
+                        } else {
+                            entity.addEventListener('mouseenter', function (event) {
+                                linkedEntity.play();
+                            });
+                        }
+                    }
+                    if (data.action == "stop") {
+                        if (data.onclick == "True") {
+                            linkedEntity.stop();
+                        }
+                        else {
+                            linkedEntity.stop();
+                        }
+                    }
+
+                }
+
+                if (data.action == "link") {
+                  if (data.onclick == "True") {
+                      entity.addEventListener('click', function (event) {
+                          window.location.href = "Page" + data.linkedEntity + ".html"
+                        });
+                  }
+                  else {
+                      entity.addEventListener('mouseenter', function (event) {
+                          window.location.href = "Page" + data.linkedEntity + ".html"
+                        });
+                    }
+                }
+			}
+		});
+
+</script>
+</head>
+<body>
+    <a-scene>
+        <a-entity camera position="0 0 0" wasd-controls="false" look-controls></a-entity>
+        <a-entity oculus-go-controls="hand: right" raycaster="objects: .clickable" laser-controls></a-entity>
+
+
+        <a-assets>
+            <img id="impPrev">
+            @if (Model.backgroundImage != null)
+            {
+                var base64 = Convert.ToBase64String(Model.backgroundImage.Img);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                <img id="background-image" src="@imgSrc" />
+
+            }
+            else
+            {
+                <img id="background-image" />
+            }
+
+            @if (Model.VRObjects != null)
+            {
+
+                @foreach (VRObject item in Model.VRObjects.Where(c => c.ObjectType == "AudioObject"))
+                {
+                    <audio id="audiofile-@item.Id" src="@item.Value" preload="auto"></audio>
+                }
+                @foreach (VRObject item in Model.VRObjects.Where(c => c.ObjectType == "VideoObject"))
+                {
+                    <video id="videofile-@item.Id" src="@item.Value" preload="auto"></video>
+                }
+
+            }
+
+            <img id="hotSpotIcon" src="hotspot.svg" />
+            <img id="nextSceneIcon" src="next-scene.svg" />
+            <img id="playicon" src="https://img.icons8.com/flat_round/64/000000/play--v5.png" />
+            <img id="soundicon" src="sound.svg" />
+        </a-assets>
+
+
+        @if (Model.VRObjects != null)
+        {
+            @foreach (VRObject item in Model.VRObjects)
+            {
+                if (item.ObjectType == "TextObject")
+                {
+
+
+                    <a-entity id="text-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                              scale="@item.xScale @item.xScale 0.1"
+                              text="value: @item.Value; shader: msdf;
+									  font: https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/archivo/Archivo-Regular.json;
+									  color: @item.Colour;
+									  align: center;
+									  wrapCount: 40"
+                              material="shader: flat; visible: false">
+
+                    </a-entity>
+                }
+                if (item.ObjectType == "VideoObject")
+                {
+                    <a-video id="vid-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                             scale="@item.xScale @item.yScale @item.zScale"
+                             src="#videofile-@item.Id" color="@item.Colour"></a-video>
+
+                }
+                if (item.ObjectType == "ImageObject")
+                {
+
+
+                    var base64 = @item.Value;
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                    <a-image id="img-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                             scale="@item.xScale @item.yScale @item.zScale"
+                             src="@imgSrc" color="@item.Colour">
+                    </a-image>
+                }
+
+                if (item.ObjectType == "AudioObject")
+                {
+                    <a-entity id="audio-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot"
+                              sound="src: #audiofile-@item.Id; volume: 1;"><a-image look-at="[camera]" scale="0.1 0.1 0.1" src="#soundicon"></a-image></a-entity>
+                }
+
+
+            }
+        }
+
+        @if (Model.VRHotSpots != null)
+        {
+            @foreach (VRHotspot item in Model.VRHotSpots)
+            {
+                @if (item.Action == "link")
+                {
+                    <a-plane look-at="[camera]" animation="property: scale; from: 0.2 0.2 0.2; to: 0.21 0.21 0.21; loop: true; dur: 1000; easing: easeInOutElastic " scale="0.2 0.2 0.2" class="clickable" hotspot-action="action: @item.Action; linkedobject:@item.Value;" material="visible: false" id="hotspot-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot">
+                        <a-image scale="1 1 0.1"
+                                 src="#nextSceneIcon" color="#FFFFFF">
+                        </a-image>
+                    </a-plane>
+                }
+                else
+                {
+                    <a-plane look-at="[camera]" scale="0.2 0.2 0.2" class="clickable" hotspot-action="action: @item.Action; linkedobject:@item.Value; onclick:@item.OnClick;" material="visible: false" id="hotspot-@item.Id" position="@item.xPos @item.yPos @item.zPos" rotation="@item.xRot @item.yRot @item.zRot">
+                        <a-image scale="1 1 0.1"
+                                 src="#hotSpotIcon" color="#FFFFFF">
+                        </a-image>
+
+
+
+                    </a-plane>
+                }
+
+            }
+        }
+
+        @if (Model.VRQuestionCards != null)
+        {
+            @foreach (VRQuestionCard item in Model.VRQuestionCards)
+            {
+                <a-entity id="question-@item.Id" look-at="[camera]" position="@item.xPos @item.yPos @item.zPos" scale="@item.xScale @item.yScale 0.01"
+                          geometry="primitive: plane"
+                          material="color: #000">
+                    <a-entity id="question-text-@item.Id" position="0 0.4 0.01"
+                              text="align: center; font: dejavu; value: @item.Value">
+                    </a-entity>
+
+
+                    @if (Model.VRQuestionResponses != null)
+                    {
+                        var i = 0.2;
+                        if (Model.VRQuestionResponses.Count() > 0)
+                        {
+                            @foreach (VRQuestionResponse response in Model.VRQuestionResponses.Where(c => c.VRQuestionId == @item.Id))
+                            {
+                                @if (response.Response != null)
+                                {
+
+                                    <a-entity class="clickable" hoverable id="response-@response.id" position="0 @i 0.01"
+                                              text="value: @response.Response">
+                                    </a-entity>
+
+                                    i -= 0.2;
+                                }
+                            }
+                        }
+
+                    }
+                </a-entity>
+            }
+        }
+
+        @if (Model.backgroundImage != null)
+        {
+
+            <a-sky id="sky" src="#background-image" color="@Model.backgroundImage.Colour"></a-sky>
+
+        }
+        else
+        {
+            <a-sky id="sky" src="#background-image"></a-sky>
+
+        }
+
+    </a-scene>
+</body>
+</html>

@@ -1,0 +1,16 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title"><i class="fa fa-image"></i> Add Image</h4>
+    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container">
+        <h5 for="AddImageAssetNameAJAX">Asset Name:</h5>
+        @Html.TextBox("AddImageAssetNameAJAX", null, new { @class = "form-control" })
+        <br />
+        <label for="ImageObjectFile" class="btn-lg btn-warning margin-zero"><span class="fa fa-upload fa-fw mr-3"></span>Image Object</label>
+        <input class="no-display" id="ImageObjectFile" name="file" type="file" size="1">
+        <p class="InputErrorMessage">Please enter an asset name.</p>
+    </div>
+</div> 

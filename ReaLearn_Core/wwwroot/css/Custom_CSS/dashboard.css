@@ -1,0 +1,13 @@
+﻿.scene-card-img {
+    height: 7vw;
+    object-fit: cover;
+}
+
+.body {
+    height: 100%;
+    padding: 0px;
+}
+
+#card-column {
+    margin-top: 1%;
+}

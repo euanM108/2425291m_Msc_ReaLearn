@@ -1,0 +1,224 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model ReaLearn_Core.Models.ViewModels.ViewCoursesViewModel
+@{
+    ViewBag.Title = "ViewUsers";
+}
+    
+<link href="~/css/Custom_CSS/Manage.css" />
+
+<div id="main-jumbotron" class="jumbotron bg-transparent offset-2">
+    <div id="main-row" class="row font-size-large bg-white rounded">
+
+        <div class="col row-heading-font">
+            <table id="courses-table" class="table table-hover border-left border-right table-font shadow">
+
+                <thead class="bg-light">
+                    <tr class="row-heading-font">
+                        <th scope="col" class="font-weight-normal d-none d-lg-table-cell">Course ID</th>
+                        <th scope="col" class="font-weight-normal">Name</th>
+                        <th scope="col" class="font-weight-normal d-none d-lg-table-cell">Description</th>
+                        <th scope="col" class="font-weight-normal d-none d-lg-table-cell">Date Created</th>
+                        <th scope="col" class="font-weight-normal">Actions</th>
+                        <th scope="col" class="font-weight-normal">To Scene Editor</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-transparent">
+                    @if (Model.Courses != null)
+                    {
+                        @foreach (var item in Model.Courses)
+                        {
+
+                            <tr class="row-data-font" id="@item.Id">
+                                <td id="table-id d-none d-lg-table-cell">@item.Id</td>
+                                <td id="course-row-name-@item.Id">@item.Name</td>
+                                <td class="d-none d-lg-table-cell">@item.Description</td>
+                                <td class=" d-none d-lg-table-cell">@item.TimeStamp</td>
+                                <td>
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        
+                                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                                            <div>
+                                                <button data-id="@item.Id" data-name="@item.Name" data-description="@item.Description" data-toggle="modal" data-target="#EditCourseModal" class="btn btn-success EditCourseBtn">
+                                                    Edit
+                                                </button>
+                                            </div>
+                                            <form asp-action="DeleteCourse" asp-route-id="@item.Id">
+                                                <button type="submit" class="btn btn-danger">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="btn-group mr-2 d-none d-lg-block" role="group" aria-label="Second group">
+                                            <button id="AssignCourseBtn-@item.Id" data-id="@item.Id" data-name="@item.Name" data-toggle="modal" data-target="#AssignCourseModal" class="btn btn-success AssignCourseModalBtn">
+                                                Assign Course
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td><a asp-action="SceneEditor" asp-controller="SceneEditor" asp-route-courseId="@item.Id" class="btn-lg btn-info"><img src="~/images/svg/arrow-right.svg" /></a></td>
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+
+            </table>
+            <button type="submit" data-toggle="modal" data-target="#addCourseModal" class="btn btn-warning pull-right">
+                Add Course
+            </button>
+            <div class="result">
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<div id="addCourseModal" class="fade modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h4 class="modal-title">Create A New Course</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    @Html.AntiForgeryToken()
+
+                    <form asp-action="Manage" asp-controller="Course">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.RegisterCourseViewModel.Name)
+                            @Html.TextBoxFor(m => m.RegisterCourseViewModel.Name, new { @class = "form-control", id = "titleInput" })
+                            @Html.ValidationMessageFor(m => m.RegisterCourseViewModel.Name)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.RegisterCourseViewModel.Description)
+                            @Html.TextBoxFor(m => m.RegisterCourseViewModel.Description, new { @class = "form-control", id = "descriptionInput" })
+                            @Html.ValidationMessageFor(m => m.RegisterCourseViewModel.Description)
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-secondary d-none d-md-inline-block">
+                                Save Course
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="AssignCourseModal" class="fade modal" tabindex="-1" role="dialog" data-course-id="">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AssignCourseDetails"></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <table class="table table-light" id="AssignCourseToUserTable">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>User Name</th>
+                            <th>Course Name</th>
+
+                            <th>Is Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Users != null)
+                        {
+
+                            foreach (ApplicationUser user in Model.Users)
+                            {
+                                @if (@UserManager.GetRolesAsync(user).Result.Single().ToString() != "Admin")
+                                {
+                                    <tr data-id="@user.Id">
+                                        <td>@user.FirstName</td>
+                                        <td class="courseRowName"></td>
+                                        <td><input id="isAssigned-@user.Id" type="checkbox" name="isAssigned" class="isAssignedCheckboxClass " /></td>
+                                    </tr>
+                                }
+                            }
+
+                        }
+                    </tbody>
+                </table>
+                <button id="UpdateCoursesAssignedToUsers" class="btn btn-secondary">Assign Courses</button>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="EditCourseModal" class="fade modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Course</h2>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form >
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                   
+                    <div class="form-group">
+                        <label asp-for="CourseId"></label>
+                        <input readonly  asp-for="CourseId" id = "EditCourseIdInput" class="form-control  form-control-sm" />
+                        <span asp-validation-for="CourseId" class="text-danger "></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input id="EditTitleInput" asp-for="Name" class="form-control  form-control-sm" autocomplete="off"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <input id = "EditDescriptionInput"  asp-for="Description" class="form-control  form-control-sm"autocomplete="off" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="UpdateCourseBtn" class="btn btn-secondary d-none d-md-inline-block">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js" crossorigin="anonymous"></script>
+
+<script src="~/js/Custom_JS/Manage.js"></script>>
+
+
+
+
